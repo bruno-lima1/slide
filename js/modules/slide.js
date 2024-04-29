@@ -2,6 +2,7 @@ export default class Slide {
   constructor(slide, wrapper) {
     this.slide = document.querySelector(slide)
     this.wrapper = document.querySelector(wrapper)
+    
   }
   init() {
     if (this.slide && this.wrapper) {
@@ -19,13 +20,12 @@ export default class Slide {
     this.wrapper.addEventListener("mousedown", this.onStart)
     this.wrapper.addEventListener("mouseup", this.onEnd)
   }
-  onStart(event) {
-    event.preventDefault()
+  onStart() {
     console.log("mousedown")
     this.wrapper.addEventListener("mousemove", this.onMove)
-
   }
-  onMove() {
+  onMove(event) {
+    event.preventDefault()
     console.log("moveu")
   }
   onEnd() {
