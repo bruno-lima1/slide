@@ -22,8 +22,8 @@ img {
 }
 [data-slide] li {
   flex-shrink: 0;
-  width: 80vw;
   max-width: 800px;
+  width: 80vw;
   margin: 0 20px;
 }
 /* [data-slide] {
