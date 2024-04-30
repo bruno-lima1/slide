@@ -14,9 +14,9 @@ img {
   display: block;
   max-width: 100%;
 }
-/* [data-wrapper] {
+[data-wrapper] {
   overflow: hidden;
-} */
+}
 [data-slide] {
   display: flex;
 }
