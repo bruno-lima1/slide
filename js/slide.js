@@ -8,8 +8,36 @@ export default class Slide {
     if (this.wrapper && this.slide) {
       this.bindEvents()
       this.addEvents()
+      this.slidesConfig()
     }
     return this;
+  }
+  changeSlide(index) {
+    const activeSlide = this.slideArray[index]
+    this.moveSlide(this.slideArray[index].position)
+    this.slidesIndexNav(index)
+    this.values.endPosition = activeSlide.position
+  }
+  slidesIndexNav(index) {
+    const last = this.slideArray.length -1
+    this.index = {
+      prev: index ? index - 1 : undefined,
+      active: index,
+      next: index === last ? undefined : index + 1
+    }
+  }
+  slidesConfig() {
+    this.slideArray = [...this.slide.children].map((element) => {
+      const position = this.slidePosition(element);
+      return {
+        position,
+        element
+      }
+    })
+  }
+  slidePosition(slide) {
+    const margin = (this.wrapper.offsetWidth - slide.offsetWidth) / 2;
+    return -(slide.offsetLeft - margin)
   }
   bindEvents() {
     this.onStart = this.onStart.bind(this)
@@ -40,7 +68,10 @@ export default class Slide {
       : event.changedTouches[0].clientX
     this.values.movement = Math.floor((this.values.startPosition - clientX) * 1.6);
     this.values.distance = Math.floor(this.values.endPosition - this.values.movement)
-    this.slide.style.transform = `translate3d(${this.values.distance}px, 0, 0)`;
+    return this.moveSlide(this.values.distance)
+  }
+  moveSlide(distance) {
+  this.slide.style.transform = `translate3d(${distance}px, 0, 0)`;
   }
   onEnd(event) {
     const typemove = (event.type === "mouseup")

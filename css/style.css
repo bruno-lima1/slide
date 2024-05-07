@@ -26,3 +26,6 @@ img {
   width: 80vw;
   margin: 0 20px;
 }
+[data-slide] li {
+  /* transform: translate3d(-1308.5px, 0, 0) */
+}
