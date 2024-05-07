@@ -1,3 +1,43 @@
+export default class Slide {
+  constructor(wrapper, slide) {
+    this.wrapper = document.querySelector(wrapper);
+    this.slide = document.querySelector(slide)
+    this.values = { startPosition: 0, movement: 0, distance: 0, endPosition: 0 }
+  }
+  init() {
+    if (this.wrapper && this.slide) {
+      this.bindEvents()
+      this.addEvents()
+    }
+    return this;
+  }
+  bindEvents() {
+    this.onStart = this.onStart.bind(this);
+    this.onMove = this.onMove.bind(this);
+    this.onEnd = this.onEnd.bind(this)
+  }
+  addEvents() {
+    this.wrapper.addEventListener("mousedown", this.onStart)
+    this.wrapper.addEventListener("mouseup", this.onEnd)
+  }
+  onStart(event) {
+    this.wrapper.addEventListener("mousemove", this.onMove)
+    this.values.startPosition = event.clientX
+  }
+  onMove(event) {
+    event.preventDefault();
+    this.values.movement = (this.values.startPosition - event.clientX) * 1.6
+    this.values.distance = this.values.endPosition - this.values.movement
+    return this.moveSlide()
+  }
+  moveSlide() {
+    this.slide.style.transform = `translate3d(${this.values.distance}px, 0, 0)`
+  }
+  onEnd() {
+    this.wrapper.removeEventListener("mousemove", this.onMove)
+    this.values.endPosition = this.values.distance
+  }
+}
 
 
 
@@ -46,12 +86,12 @@
 //   constructor(wrapper, slide) {
 //     this.wrapper = document.querySelector(wrapper);
 //     this.slide = document.querySelector(slide);
-//     this.dist = { finalPosition: 0, startX: 0, movement: 0 };
+//     this.values = { startPosition: 0, movement: 0, endPosition: 0, distance: 0 };
 //   }
 //   init() {
 //     if (this.wrapper && this.slide) {
 //       this.bindEvents();
-//       this.addSlideEvents();
+//       this.addEvent();
 //     }
 //     return this;
 //   }
@@ -60,30 +100,28 @@
 //     this.onMove = this.onMove.bind(this);
 //     this.onEnd = this.onEnd.bind(this);
 //   }
-//   addSlideEvents() {
+//   addEvent() {
 //     this.wrapper.addEventListener("mousedown", this.onStart);
 //     this.wrapper.addEventListener("mouseup", this.onEnd);
 //   }
 //   onStart(event) {
 //     this.wrapper.addEventListener("mousemove", this.onMove);
-//     this.dist.startX = event.clientX;
+//     this.values.startPosition = event.clientX;
 //   }
 //   onMove(event) {
-//     event.preventDefault();
-//     const distance = this.updatePosition(event.clientX);
-//     this.moveSlide(distance);
+//     event.preventDefault()
+//     this.values.distance = this.getValues(event.clientX);
+//     this.moveSlide();
 //   }
-//   updatePosition(clientX) {
-//     this.dist.movement = (this.dist.startX - clientX) * 1.6;
-//     return this.dist.finalPosition - this.dist.movement;
+//   getValues(clientX) {
+//     this.values.movement = (this.values.startPosition - clientX) * 1.6;
+//     return this.values.endPosition - this.values.movement;
 //   }
-//   moveSlide(distance) {
-//     this.dist.movePosition = distance;
-//     this.slide.style.transform = `translate3d(${distance}px, 0, 0)`;
+//   moveSlide() {
+//     this.slide.style.transform = `translate3d(${this.values.distance}px, 0, 0)`;
 //   }
 //   onEnd() {
 //     this.wrapper.removeEventListener("mousemove", this.onMove);
-//     this.dist.finalPosition = this.dist.movePosition;
-//     console.log(this.dist)
+//     this.values.endPosition = this.values.distance;
 //   }
 // }
