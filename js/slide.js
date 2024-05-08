@@ -125,10 +125,33 @@ export default class Slide {
 //   init() {
 //     if (this.wrapper && this.slide) {
 //       this.bindEvents()
+//       this.transition(true)
 //       this.addEvents()
 //       this.slidesConfig()
 //     }
 //     return this;
+//   }
+//   transition(active) {
+//     this.slide.style.transition = active ? `transform .3s` : ""
+//   }
+//   enablePrevSlide() {
+//     if (this.index.prev !== undefined) {
+//       this.changeSlide(this.index.prev)
+//     }
+//   }
+//   enableNextSlide() {
+//     if (this.index.next !== undefined) {
+//       this.changeSlide(this.index.next)
+//     }
+//   }
+//   changeSlideOnEnd() {
+//     if (this.values.movement > 120 && this.index.next !== undefined) {
+//       this.enableNextSlide()
+//     } else if (this.values.movement < -120 && this.index.prev !== undefined) {
+//       this.enablePrevSlide()
+//     } else {
+//       this.changeSlide(this.index.active)
+//     }
 //   }
 //   slidesConfig() {
 //     this.slideArray = [...this.slide.children].map((element) => {
@@ -178,6 +201,7 @@ export default class Slide {
 //       movetype = "touchmove"
 //     }
 //     this.wrapper.addEventListener(movetype, this.onMove)
+//     this.transition(false)
 //   }
 //   onMove(event) {
 //     event.preventDefault()
@@ -197,5 +221,7 @@ export default class Slide {
 //       : "touchmove"
 //     this.wrapper.removeEventListener(typemove, this.onMove)
 //     this.values.endPosition = this.values.distance
+//     this.transition(true)
+//     this.changeSlideOnEnd()
 //   }
 // }
