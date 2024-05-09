@@ -111,6 +111,7 @@ export default class Slide {
   }
   changeSlide(index) {
     this.moveSlide(this.slideArray[index].position)
+    this.values.endPosition = this.slideArray[index].position
   }
 }
 
