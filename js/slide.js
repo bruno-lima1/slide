@@ -55,11 +55,12 @@ export default class Slide {
       movePosition: 0,
       endPosition: 0
     }
+    this.active = "active"
   }
   init() {
     if (this.wrapper && this.slide) {
       this.bindEvents()
-      this.slideEvents()
+      this.addSlideEvents()
       this.centralizeSlide(0)
     }
     return this;
@@ -70,7 +71,7 @@ export default class Slide {
     this.onEnd = this.onEnd.bind(this)
     this.centralizeWhenResize = debounce(this.centralizeWhenResize.bind(this), 1000)
   }
-  slideEvents() {
+  addSlideEvents() {
     this.wrapper.addEventListener("mousedown", this.onStart)
     this.wrapper.addEventListener("touchstart", this.onStart)
     this.wrapper.addEventListener("mouseup", this.onEnd)
@@ -79,43 +80,37 @@ export default class Slide {
   }
   onStart(event) {
     event.preventDefault()
-    let movetype
     if (event.type === "mousedown") {
-      movetype = "mousemove"
+      this.wrapper.addEventListener("mousemove", this.onMove)
       this.values.startPosition = event.clientX
-    } else if (event.type === "touchstart") {
-      movetype = "touchmove"
+    } else {
+      this.wrapper.addEventListener("touchmove", this.onMove)
       this.values.startPosition = event.changedTouches[0].clientX
     }
-    this.wrapper.addEventListener(movetype, this.onMove)
-    this.slideTransition(false)
+    this.enableTransition(false)
   }
   onMove(event) {
     if (event.type === "mousemove") {
-      this.values.distance = (this.values.startPosition - event.clientX) * 2
-    } else if (event.type === "touchmove") {
-      this.values.distance = (this.values.startPosition - event.changedTouches[0].clientX) * 2
+      this.values.distance = this.values.startPosition - event.clientX
+    } else {
+      this.values.distance = this.values.startPosition - event.changedTouches[0].clientX
     }
     this.values.movePosition = this.values.endPosition - this.values.distance
     this.moveSlide(this.values.movePosition)
   }
-  moveSlide(movePosition) {
-    this.slide.style.transform = `translate3d(${movePosition}px, 0, 0)`
+  moveSlide(position) {
+    this.slide.style.transform = `translate3d(${position}px, 0, 0)`
   }
-  onEnd(event) {
-    if (event.type === "mouseup") {
-      this.wrapper.removeEventListener("mousemove", this.onMove)
-    } else {
-      this.wrapper.removeEventListener("touchmove", this.onMove)
-    }
+  onEnd() {
+    this.wrapper.removeEventListener("mousemove", this.onMove)
     this.values.endPosition = this.values.movePosition
     this.changeSlide()
-    this.slideTransition(true)
+    this.enableTransition(true)
   }
   centralizeSlide(index) {
     this.slideArray = [...this.slide.children].map((element) => {
-      this.margin = (this.wrapper.offsetWidth - element.offsetWidth) / 2
-      const offsetLeft = -(element.offsetLeft - this.margin)
+      const margin = (this.wrapper.offsetWidth - element.offsetWidth) / 2
+      const offsetLeft = -(element.offsetLeft - margin)
       return {
         element,
         offsetLeft
@@ -127,34 +122,34 @@ export default class Slide {
     this.enableAnimation(index)
   }
   indexSlide(index) {
-    this.positions = {
+    this.index = {
       prev: index - 1 === -1 ? undefined : index - 1,
       active: index,
-      next: index + 1 === 6 ? undefined : index + 1
+      next: index + 1 === 6 ? undefined : index + 1,
     }
   }
   changeSlide() {
-    if (this.values.distance > 0 && this.positions.next !== undefined) {
-      this.centralizeSlide(this.positions.next)
-    } else if (this.values.distance < 0 && this.positions.prev !== undefined) {
-      this.centralizeSlide(this.positions.prev)
-    } else if (this.values.distance > 0 && this.positions.next === undefined) {
-      this.centralizeSlide(this.positions.active)
-    } else if (this.values.distance < 0 && this.positions.prev === undefined) {
-      this.centralizeSlide(this.positions.active)
+    if (this.values.distance > 0 && this.index.next !== undefined) {
+      this.centralizeSlide(this.index.next)
+    } else if (this.values.distance < 0 && this.index.prev !== undefined) {
+      this.centralizeSlide(this.index.prev)
+    } else if (this.values.distance > 0 && this.index.next === undefined) {
+      this.centralizeSlide(this.index.active)
+    } else if (this.values.distance < 0 && this.index.prev === undefined) {
+      this.centralizeSlide(this.index.active)
     }
   }
-  slideTransition(active) {
+  enableTransition(active) {
     this.slide.style.transition = active ? ".5s" : "";
   }
   enableAnimation(index) {
     this.slideArray.forEach((item) => {
       item.element.classList.remove("active")
     })
-    this.slideArray[index].element.classList.add("active")
+    this.slideArray[index].element.classList.add(this.active)
   }
   centralizeWhenResize() {
-    this.centralizeSlide(this.positions.active)
+    this.centralizeSlide(this.index.active)
   }
 }
 
