@@ -43,12 +43,6 @@
 
 
 
-import Slide from "./slide.js";
-const slide = new Slide("[data-wrapper]", "[data-slide]");
+import SlideNav from "./slide.js";
+const slide = new SlideNav("[data-wrapper]", "[data-slide]", ".thumb-images");
 slide.init()
-
-
-
-// import {SlideNav} from "./slide.js";
-// const slide = new SlideNav("[data-wrapper]", "[data-slide]");
-// slide.init()
