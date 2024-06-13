@@ -14,14 +14,14 @@ img {
   display: block;
   max-width: 100%;
 }
-.thumb-images ul {
+[data-control] ul {
   display: flex;
   justify-content: center;
   margin-top: 40px;
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
-.thumb-images li {
+[data-control] li {
   opacity: .8;
   transform: scale(.8);
   width: 40px;
@@ -33,7 +33,7 @@ img {
   transition: .3s;
   cursor: pointer;
 }
-.thumb-images li.active {
+[data-control] li.active {
   opacity: 1;
   transform: scale(1)
 }
