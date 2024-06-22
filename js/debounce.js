@@ -1,55 +1,10 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default function debounce(callback, delay) {
   let timer;
-  return (...args) => {
+  return ((...args) => {
     if (timer) clearTimeout(timer)
     timer = setTimeout(() => {
-      callback(...args)
       timer = null
+      callback(...args)
     }, delay)
-  }
+  })
 }
