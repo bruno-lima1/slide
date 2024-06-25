@@ -22,10 +22,10 @@ img {
   margin-bottom: 20px;
 }
 [data-control] li {
-  opacity: .8;
-  transform: scale(.8);
-  width: 40px;
-  height: 40px;
+  opacity: .7;
+  transform: scale(.7);
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   overflow: hidden;
   margin: 2px;
